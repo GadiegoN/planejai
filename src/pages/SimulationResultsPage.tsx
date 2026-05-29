@@ -6,11 +6,12 @@ import {
   PiggyBank,
   Wallet,
 } from "lucide-react";
-import { Card } from "../components/features/SimulationResults/Card";
-import { PageHero } from "../components/shared/PageHero";
-import { calcMonthlySavings } from "../utils/simulation";
 import { useParams } from "react-router-dom";
+import { AIInsightsCard } from "../components/features/SimulationResults/AIInsightCardProps";
+import { PageHero } from "../components/shared/PageHero";
 import { useSimulationStorage } from "../hooks/useSimulationStorage";
+import { calcMonthlySavings } from "../utils/simulation";
+import { Card } from "../components/features/SimulationResults/Card";
 
 export function SimulationResultsPage() {
   const { id } = useParams<{ id: string }>();
@@ -52,7 +53,7 @@ export function SimulationResultsPage() {
         />
       </div>
       <div className="grid gap-6 lg:grid-cols-3">
-        {/* <AIInsightsCard simulationId={data.id} /> */}
+        <AIInsightsCard simulationId={data.id} />
         <div className="order-1 flex flex-col gap-6 lg:order-2">
           <Card
             icon={Wallet}
