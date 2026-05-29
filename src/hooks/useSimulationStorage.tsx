@@ -3,46 +3,62 @@ import type { SimulationFormData, SimulationRecord } from "../data/simulation";
 const LOCAL_STORAGE_KEY = "simulation-data";
 
 export const useSimulationStorage = () => {
+  const getSavedData = () => {
+    const storage = localStorage.getItem(LOCAL_STORAGE_KEY);
+
+    return storage ? (JSON.parse(storage) as SimulationRecord[]) : [];
+  };
+
+  const setSavedData = (data: SimulationRecord[]) => {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+  };
+
   const saveFormData = (formData: SimulationFormData) => {
     const id = crypto.randomUUID();
-    const record: SimulationRecord = { ...formData, id };
+    const record: SimulationRecord = {
+      ...formData,
+      id,
+      createdAt: new Date().toISOString(),
+    };
 
-    const storage = localStorage.getItem(LOCAL_STORAGE_KEY);
-    const savedData = storage
-      ? (JSON.parse(storage) as SimulationRecord[])
-      : [];
+    const savedData = getSavedData();
 
-    localStorage.setItem(
-      LOCAL_STORAGE_KEY,
-      JSON.stringify([...savedData, record]),
-    );
+    setSavedData([...savedData, record]);
 
     return id;
   };
 
   const getFormData = (id: string) => {
-    const storage = localStorage.getItem(LOCAL_STORAGE_KEY);
-
-    if (!storage) {
-      return null;
-    }
-
-    const savedData = JSON.parse(storage) as SimulationRecord[];
+    const savedData = getSavedData();
     return savedData.find((record) => record.id === id) || null;
   };
 
+  const getAllSimulations = () => {
+    return getSavedData().slice().reverse();
+  };
+
   const updateSimulation = (id: string, data: SimulationRecord) => {
-    const storage = localStorage.getItem(LOCAL_STORAGE_KEY);
-    const savedData = storage
-      ? (JSON.parse(storage) as SimulationRecord[])
-      : [];
+    const savedData = getSavedData();
 
     const updated = savedData.map((record) =>
       record.id === id ? { ...data } : record,
     );
 
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+    setSavedData(updated);
   };
 
-  return { saveFormData, getFormData, updateSimulation };
+  const deleteSimulation = (id: string) => {
+    const savedData = getSavedData();
+    const filtered = savedData.filter((record) => record.id !== id);
+
+    setSavedData(filtered);
+  };
+
+  return {
+    saveFormData,
+    getFormData,
+    getAllSimulations,
+    updateSimulation,
+    deleteSimulation,
+  };
 };
