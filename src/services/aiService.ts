@@ -96,3 +96,14 @@ export const getInsight = async (prompt: string): Promise<InsightData> => {
     throw new Error("A IA retornou um JSON inválido", { cause: error });
   }
 };
+
+export const getChatAnswer = async (prompt: string): Promise<string> => {
+  const response = await callGeminiAPI(prompt);
+  const rawText = response.candidates?.[0]?.content?.parts?.[0]?.text;
+
+  if (!rawText) {
+    throw new Error("Resposta vazia da IA");
+  }
+
+  return rawText.trim();
+};

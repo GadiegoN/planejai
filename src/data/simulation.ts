@@ -10,6 +10,13 @@ import {
 import type { FormStepProps } from "../components/features/Simulation/FormStep";
 import type { InsightData } from "../services/aiService";
 
+export interface ChatMessage {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  createdAt: string;
+}
+
 export const simulationFormSteps = [
   {
     id: "income",
@@ -96,4 +103,5 @@ export type SimulationRecord = SimulationFormData & {
   id: string;
   createdAt?: string;
   insight?: InsightData;
+  chatMessages?: ChatMessage[];
 };

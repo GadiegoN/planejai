@@ -12,6 +12,7 @@ import { PageHero } from "../components/shared/PageHero";
 import { useSimulationStorage } from "../hooks/useSimulationStorage";
 import { calcMonthlySavings } from "../utils/simulation";
 import { Card } from "../components/features/SimulationResults/Card";
+import { formatCurrency } from "../utils/currency";
 
 export function SimulationResultsPage() {
   const { id } = useParams<{ id: string }>();
@@ -48,7 +49,7 @@ export function SimulationResultsPage() {
           variant="primary"
           icon={PiggyBank}
           label="Economia mensal"
-          value={`R$ ${monthlySavings.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+          value={formatCurrency(monthlySavings)}
           subtitle={"Economia mensal necessária"}
         />
       </div>
